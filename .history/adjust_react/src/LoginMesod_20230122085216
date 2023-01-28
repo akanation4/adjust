@@ -1,0 +1,108 @@
+//認可に必要なパラメータ
+const authParams ={
+    clientId: "???",
+    clientSecret: "???",
+    scope: "profile email",
+    responseType: "code",
+    approvalPrompt: "force",
+    accessType: "offline",
+    redirectUri: "http://localhost:3000/auth_code",
+    grantType: "authorization_code"   
+}
+
+const data = require(client_secret.json);
+
+authParams.clientId = data[client_id];
+authParams.clientSecret = data[client_secret];
+
+//認可情報
+const AuthInfo = {
+    access_token: "",
+    refresh_token: "",
+    scope: "",
+    token_type: "",
+    id_token: "",
+    expires_in: 0
+};
+
+//認可情報をLocalStorageに保存
+function setAuthInfo(AuthInfo) {
+    window.localStorage.setItem("authInfoKey", JSON.stringify(AuthInfo));
+}
+
+//認可情報をLocalStorageから取得
+function getAuthInfo() {
+    const item = window.localStorage.getItem("authInfoKey");
+    if (item !== null) {
+        return JSON.parse(item);
+    } else {
+        return null;
+    }
+}
+
+//認可情報をLocalStorageから削除
+function removeAuthInfo() {
+    window.localStorage.removeItem("authInfoKey");
+}
+
+//Googleのログイン画面に遷移
+function requestCodeFlow() {
+    const params = {
+        client_id: authParams.clientId,
+        redirect_uri: authParams.redirectUri,
+        scope: authParams.scope,
+        response_type: authParams.responseType,
+        approval_prompt: authParams.approvalPrompt,
+        access_type: authParams.accessType
+    };
+    const query = new URLSearchParams(params).toString();
+    window.location.href = "https://accounts.google.com/o/oauth2/auth?" + query;
+}
+
+//URLをパースしcodeを取得
+function getCode() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("code");
+}
+
+//トークンを取得
+async function getAuthToken(code) {
+    const params = {
+        code,
+        client_id: authParams.clientId,
+        client_secret: authParams.clientSecret,
+        redirect_uri: authParams.redirectUri,
+        grant_type: authParams.grantType
+    };
+    const res = await axios.post('https://www.googleapis.com/oauth2/v4/token', params);
+    return res.data;
+}
+
+//ログアウト
+async function signOut(AuthInfo) {
+    try {
+        if(AuthInfo !== undefined) {
+            const res = await axios.get('https://accounts.google.com/o/oauth2/revoke',
+                {
+                    params: {
+                        token: AuthInfo.access_token,
+                    },
+                }
+            );
+            if (res.status === 200) {
+                removeAuthInfo();
+                window.location.href = "/";
+            }
+        }
+    } finally {
+        removeAuthInfo();
+        window.location.href = "/";
+    }
+    return;
+}
+
+//ユーザ情報の取得
+async function getUserInfo(AuthInfo) {
+    
+    }
+}

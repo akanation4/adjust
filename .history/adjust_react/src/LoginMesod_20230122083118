@@ -1,0 +1,14 @@
+//認可情報
+const AuthInfo = {
+    access_token: "",
+    refresh_token: "",
+    scope: "",
+    token_type: "",
+    id_token: "",
+    expires_in: 0
+};
+
+//認可情報をLocalStorageに保存
+function setAuthInfo(Audio) {
+    window.localStorage.setItem("authInfoKey", JSON.stringify(a));
+}

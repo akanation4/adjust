@@ -1,0 +1,4 @@
+const authParams ={
+    clientId: "???",
+    clientSecret: "???",
+}

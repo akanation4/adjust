@@ -1,0 +1,56 @@
+//認可に必要なパラメータ
+const authParams ={
+    clientId: "???",
+    clientSecret: "???",
+    scope: "profile email",
+    responseType: "code",
+    approvalPrompt: "force",
+    accessType: "offline",
+    redirectUri: "http://localhost:3000/auth_code",
+    grantType: "authorization_code"   
+}
+
+const data = require(client_secret.json);
+
+authParams.clientId = data[client_id];
+authParams.clientSecret = data[client_secret];
+
+//認可情報
+const AuthInfo = {
+    access_token: "",
+    refresh_token: "",
+    scope: "",
+    token_type: "",
+    id_token: "",
+    expires_in: 0
+};
+
+//認可情報をLocalStorageに保存
+function setAuthInfo(AuthInfo) {
+    window.localStorage.setItem("authInfoKey", JSON.stringify(AuthInfo));
+}
+
+//認可情報をLocalStorageから取得
+function getAuthInfo() {
+    const item = window.localStorage.getItem("authInfoKey");
+    if (item !== null) {
+        return JSON.parse(item);
+    } else {
+        return null;
+    }
+}
+
+//認可情報をLocalStorageから削除
+function removeAuthInfo() {
+    window.localStorage.removeItem("authInfoKey");
+}
+
+//Googleのログイン画面に遷移
+function requestCodeFlow() {
+    const params = {
+        client_id: authParams.clientId,
+        redirect_uri: authParams.redirectUri,
+        scope: authParams.scope,
+        response_type: authParams.responseType,
+    }
+}
