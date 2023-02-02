@@ -20,26 +20,8 @@ app = Flask(__name__)
 # Specify URL and function to call
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'adjust.json')
-    print('credential_path:', credential_path)
-
-    store = Storage(credential_path)
-    credentials = store.get()
-    scopes = " ".join([SCOPE])
-    flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, scopes)
-    flow.user_agent = APPLICATION_NAME
-    args = tools.argparser.parse_args()
-    args.noauth_local_webserver = True
-    if flags:
-        credentials = tools.run_flow(flow, store, flags)
-    else: # Needed only for compatibility with Python 2.6
-        credentials = tools.run(flow, store)
-    return 'Hello, World!', 200
+    x = request.json['token_type']
+    return x, 200
 
 @app.route('/make', methods=['POST'])
 def make():
