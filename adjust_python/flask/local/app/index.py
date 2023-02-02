@@ -71,16 +71,16 @@ def join():
         return jsonify({'error': str(e)}), 500
     return str(room_id).zfill(4), 200
 
-@app.route('/adjust', methods=['POST'])
-def adjust():
-    db = dao.Database()
-    credentials = dao.Credentials()
-    calendar = dao.Calendar()
-    room_id = request.get_data()
-    try:
-        db.update_room(room_id)
-        subs = db.select_user(room_id)
-        for sub in subs:
-            j_credential = db.select_credentials(sub)
-            o_credentials = credentials.get_credentials(j_credential)
-            calendar.load_events(o_credentials)
+# @app.route('/adjust', methods=['POST'])
+# def adjust():
+#     db = dao.Database()
+#     credentials = dao.Credentials()
+#     calendar = dao.Calendar()
+#     room_id = request.get_data()
+#     try:
+#         db.update_room(room_id)
+#         subs = db.select_user(room_id)
+#         for sub in subs:
+#             j_credential = db.select_credentials(sub)
+#             o_credentials = credentials.get_credentials(j_credential)
+#             calendar.load_events(o_credentials)
