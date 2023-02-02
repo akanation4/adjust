@@ -1,7 +1,7 @@
 import random
 import dao
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cores import CORS
 
 SCOPE = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
