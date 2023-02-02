@@ -1,6 +1,7 @@
 import random
 import dao
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 SCOPE = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -16,12 +17,26 @@ except ImportError:
 
 
 app = Flask(__name__)
+CORS(app)
+
+@api.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    return response
 
 # Specify URL and function to call
 @app.route('/test', methods=['GET', 'POST'])
 def test():
     x = request.json['token_type']
     return x, 200
+
+@app.route('/loggedin', methods=['POST'])
+def loggedin():
+    access_token = request.json['access_token']
+    refresh_token = request.json['refresh_token']
+    token_type = request.json['token_type']
 
 @app.route('/make', methods=['POST'])
 def make():
@@ -56,16 +71,16 @@ def join():
         return jsonify({'error': str(e)}), 500
     return str(room_id).zfill(4), 200
 
-# @app.route('/adjust', methods=['POST'])
-# def adjust():
-#     db = dao.Database()
-#     credentials = dao.Credentials()
-#     calendar = dao.Calendar()
-#     room_id = request.get_data()
-#     try:
-#         db.update_room(room_id)
-#         subs = db.select_user(room_id)
-#         for sub in subs:
-#             j_credential = db.select_credentials(sub)
-#             o_credentials = credentials.get_credentials(j_credential)
-#             calendar.load_events(o_credentials)
+@app.route('/adjust', methods=['POST'])
+def adjust():
+    db = dao.Database()
+    credentials = dao.Credentials()
+    calendar = dao.Calendar()
+    room_id = request.get_data()
+    try:
+        db.update_room(room_id)
+        subs = db.select_user(room_id)
+        for sub in subs:
+            j_credential = db.select_credentials(sub)
+            o_credentials = credentials.get_credentials(j_credential)
+            calendar.load_events(o_credentials)
