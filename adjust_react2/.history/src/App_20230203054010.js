@@ -1,0 +1,24 @@
+import React from 'react';
+import './App.css';
+import Login from './Login';
+import Room from './Room';
+import RoomPage from './RoomPage';
+import AlertPage from './AlertPage';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import DataBase from './DataBase';
+
+function App() {
+  return( 
+    <DataBase/>   
+    <Router>  
+      <Routes>
+        <Route exact path="/" element={<Login />} />
+        <Route path="/auth_code" element={<Login />} />
+        <Route path="/room" element={<Room />} />
+        <Route path="/adjust" element={<RoomPage />} />
+        <Route path="/*" element={<AlertPage />} />
+      </Routes>
+    </Router>
+  );
+
+} export default App;

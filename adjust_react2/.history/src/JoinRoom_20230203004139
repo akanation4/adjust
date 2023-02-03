@@ -1,0 +1,4 @@
+import { useC}
+export default function JoinRoom() {
+
+}

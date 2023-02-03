@@ -1,0 +1,4 @@
+import { useContext } from "react";
+export default function JoinRoom() {
+    const pass = useContext(ontext);
+}
