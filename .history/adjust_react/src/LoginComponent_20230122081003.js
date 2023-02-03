@@ -1,4 +1,0 @@
-const authParams ={
-    clientId: "???",
-    c
-}
