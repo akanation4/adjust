@@ -38,6 +38,7 @@ def loggedin():
         db.close()
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    return 'OK', 200
 
 @app.route('/make', methods=['POST'])
 def make():
