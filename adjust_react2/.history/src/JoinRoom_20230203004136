@@ -1,4 +1,0 @@
-import { use}
-export default function JoinRoom() {
-
-}
